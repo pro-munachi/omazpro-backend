@@ -29,7 +29,7 @@ func main(){
 	router.Use(cors.CORSMiddleware())
 
 	routes.AuthRoutes(router)
-	// routes.UserRoutes(router)
+	routes.ProductRoutes(router)
 
 	
 	router.GET("/api-1", func(c *gin.Context){

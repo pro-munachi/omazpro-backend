@@ -107,7 +107,7 @@ func Signup()gin.HandlerFunc{
 			return
 		}
 		defer cancel()
-		c.JSON(http.StatusOK, gin.H{"message": "request processed successfullt", "data":user, "hasError": false, "insertId": resultInsertionNumber})
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "data":user, "hasError": false, "insertId": resultInsertionNumber})
 	}
 
 }
@@ -132,7 +132,7 @@ func Login() gin.HandlerFunc{
 
 		passwordIsValid, msg := VerifyPassword(*user.Password, *foundUser.Password)
 		defer cancel()
-		if passwordIsValid != true{
+		if !passwordIsValid{
 			c.JSON(http.StatusOK, gin.H{"message": msg, "hasError": true})
 			return
 		}
@@ -149,6 +149,6 @@ func Login() gin.HandlerFunc{
 			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
 			return
 		}
-		c.JSON(http.StatusOK, gin.H{"message": "request processed successfullt", "data":foundUser, "hasError": false})
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "data":foundUser, "hasError": false})
 	}
 }
