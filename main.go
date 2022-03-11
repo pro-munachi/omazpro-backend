@@ -4,8 +4,9 @@ import (
 	"log"
 	"os"
 
-	// "github.com/OMAZPRO/middleware"
-	// routes "github.com/Gameware/routes"
+	cors "omazpro/middleware"
+	routes "omazpro/routes"
+
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -25,9 +26,9 @@ func main(){
 
 	router := gin.New()
 	router.Use(gin.Logger())
-	// router.Use(cors.CORSMiddleware())
+	router.Use(cors.CORSMiddleware())
 
-	// routes.AuthRoutes(router)
+	routes.AuthRoutes(router)
 	// routes.UserRoutes(router)
 
 	
