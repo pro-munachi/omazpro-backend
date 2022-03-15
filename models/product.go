@@ -12,6 +12,7 @@ type Product struct{
 	Price		*int					`json:"price" validate:"required,min=1"`
 	Countinstock		*int					`json:"countinstock" validate:"required,min=0"`
 	Description		*string					`json:"description" `
+	Category		*string					`json:"category" `
 	Createdat		time.Time				`json:"createdat"`
 	Updatedat		time.Time				`json:"updatedat"`
 	Productid		string					`json:"productid" `

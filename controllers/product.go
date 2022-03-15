@@ -78,3 +78,21 @@ func GetProducts() gin.HandlerFunc{
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "products":allproducts, "hasError": false})}
 }
+
+
+func GetProduct() gin.HandlerFunc{
+	return func(c *gin.Context){
+		Productid := c.Param("product_id")
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		var product models.Product
+		err := productCollection.FindOne(ctx, bson.M{"productid":Productid}).Decode(&product)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "product":product, "hasError": false})
+	}
+}
