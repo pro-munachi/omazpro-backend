@@ -34,6 +34,7 @@ func CreateOrder()gin.HandlerFunc{
 
 		order.ID = primitive.NewObjectID()
 		order.Orderid = order.ID.Hex()
+		order.User = c.GetString("uid")
 		order.Createdat, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 		order.Updatedat, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))
 
