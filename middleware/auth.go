@@ -49,7 +49,7 @@ func Admin() gin.HandlerFunc{
 			return
 		}
 
-		if !claims.Admin {
+		if claims.User_type == "ADMIN" {
 			c.JSON(http.StatusOK, gin.H{"message": "user is not an admin", "hasError": true})
 			c.Abort()
 			return
@@ -60,7 +60,6 @@ func Admin() gin.HandlerFunc{
 		c.Set("last_name", claims.Last_name)
 		c.Set("uid",claims.Uid)
 		c.Set("user_type", claims.User_type)
-		c.Set("admin", claims.Admin)
 		c.Next()
 	}
 }

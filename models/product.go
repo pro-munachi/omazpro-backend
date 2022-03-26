@@ -14,6 +14,7 @@ type Product struct{
 	Outofstock		*bool					`json:"outofstock"`
 	Description		*string					`json:"description" `
 	Category		*string					`json:"category" `
+	Image		*string					`json:"image" `
 	Createdat		time.Time				`json:"createdat"`
 	Updatedat		time.Time				`json:"updatedat"`
 	Productid		string					`json:"productid" `
