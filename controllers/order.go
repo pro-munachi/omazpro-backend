@@ -18,7 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var orderCollection *mongo.Collection = database.OpenCollection(database.Client, "product")
+var orderCollection *mongo.Collection = database.OpenCollection(database.Client, "order")
 
 
 func CreateOrder()gin.HandlerFunc{
