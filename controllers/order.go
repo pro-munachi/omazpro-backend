@@ -52,7 +52,7 @@ func CreateOrder()gin.HandlerFunc{
 			return
 		}
 		defer cancel()
-		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "data":order, "hasError": false, "insertId": resultInsertionNumber})
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "data":order, "id": order.Orderid,  "hasError": false, "insertId": resultInsertionNumber})
 	}
 }
 
@@ -96,4 +96,32 @@ func GetOrder() gin.HandlerFunc{
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "order":order, "hasError": false})
 	}
+}
+
+func UpdateOrder() gin.HandlerFunc{
+	return func(c *gin.Context){
+		id := c.Param("id")
+		primID, _ :=primitive.ObjectIDFromHex(id)
+
+		var order models.Order
+		if err := c.BindJSON(&order); err != nil {
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+
+	
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+
+		filter := bson.M{"ID": primID}
+		set := bson.M{"$set": bson.M{"ID": order.ID, "OrderItem": order.OrderItem, "TotalPrice": order.TotalPrice, "IsPaid": true, "PaymentMethod": order.PaymentMethod, "User": order.User, "Orderid": order.Orderid}}
+		value, err := orderCollection.UpdateOne(ctx, filter, set)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfullt", "data": value, "order":id, "hasError": false})
+
+	}	
 }
