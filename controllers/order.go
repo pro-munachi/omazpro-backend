@@ -107,15 +107,38 @@ func UpdateOrder() gin.HandlerFunc{
 			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
 			return
 		}
-
-		fmt.Println(order)
-
 	
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 
 
 		filter := bson.M{"orderid": id}
 		set := bson.M{"$set": bson.M{ "IsPaid": order.IsPaid}}
+		value, err := orderCollection.UpdateOne(ctx, filter, set)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfullt", "data": value, "order":id, "hasError": false})
+
+	}	
+}
+
+func ConfirmPayment() gin.HandlerFunc{
+	return func(c *gin.Context){
+		id := c.Param("id")
+
+		var order models.Order
+		if err := c.BindJSON(&order); err != nil {
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+	
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+
+		filter := bson.M{"orderid": id}
+		set := bson.M{"$set": bson.M{ "ConfirmPayment": order.ConfirmPayment}}
 		value, err := orderCollection.UpdateOne(ctx, filter, set)
 		defer cancel()
 		if err != nil{

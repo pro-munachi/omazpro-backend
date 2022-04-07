@@ -13,10 +13,11 @@ func OrderRoutes(incomingRoutes *gin.Engine){
 
 	incomingRoutes.POST("order/create", controller.CreateOrder())
 	incomingRoutes.GET("/orders/:order_id", controller.GetOrder())
+	incomingRoutes.POST("/orders/paid/:id", controller.UpdateOrder())
 
 	incomingRoutes.Use(middleware.Admin())
 
 	incomingRoutes.GET("orders", controller.GetOrders())
-	incomingRoutes.POST("/orders/paid/:id", controller.UpdateOrder())
+	incomingRoutes.POST("/orders/confirm/:id", controller.ConfirmPayment())
 
 }

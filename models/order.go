@@ -26,4 +26,5 @@ type Order struct{
 	Createdat		time.Time				`json:"createdat"`
 	Updatedat		time.Time				`json:"updatedat"`
 	Orderid		string					`json:"orderid" `
+	ConfirmPayment	*bool				`json:"confirmpayment"`
 }
