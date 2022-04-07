@@ -14,5 +14,6 @@ func ProductRoutes(incomingRoutes *gin.Engine){
 
 	incomingRoutes.Use(middleware.Admin())
 	incomingRoutes.POST("products/create", controller.CreateProduct())
+	incomingRoutes.DELETE("/products/delete/:id", controller.DeleteProduct())
 
 }

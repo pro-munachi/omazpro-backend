@@ -96,3 +96,21 @@ func GetProduct() gin.HandlerFunc{
 		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "product":product, "hasError": false})
 	}
 }
+
+func DeleteProduct() gin.HandlerFunc{
+	return func(c *gin.Context){
+		id := c.Param("id")
+
+		// primID, _ :=primitive.ObjectIDFromHex(id)
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		res, err := productCollection.DeleteOne(ctx, bson.M{"productid": id})
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "product":res, "hasError": false})
+	}
+}
