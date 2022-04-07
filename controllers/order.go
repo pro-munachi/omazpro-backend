@@ -109,12 +109,22 @@ func UpdateOrder() gin.HandlerFunc{
 			return
 		}
 
+		fmt.Println(order)
+
 	
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 
+		var one models.Order
+
+		err := userCollection.FindOne(ctx, bson.M{"order_id":primID}).Decode(&one)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
 
 		filter := bson.M{"ID": primID}
-		set := bson.M{"$set": bson.M{"ID": order.ID, "OrderItem": order.OrderItem, "TotalPrice": order.TotalPrice, "IsPaid": true, "PaymentMethod": order.PaymentMethod, "User": order.User, "Orderid": order.Orderid}}
+		set := bson.M{"$set": bson.M{"OrderItem": order.OrderItem, "TotalPrice": order.TotalPrice, "IsPaid": true, "PaymentMethod": order.PaymentMethod, "User": order.User, "Orderid": order.Orderid}}
 		value, err := orderCollection.UpdateOne(ctx, filter, set)
 		defer cancel()
 		if err != nil{
