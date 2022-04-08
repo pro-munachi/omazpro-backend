@@ -31,6 +31,7 @@ func main(){
 	routes.AuthRoutes(router)
 	routes.ProductRoutes(router)
 	routes.OrderRoutes(router)
+	routes.GalleryRoutes(router)
 
 	
 	router.GET("/api-1", func(c *gin.Context){
