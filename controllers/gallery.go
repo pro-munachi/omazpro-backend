@@ -90,10 +90,6 @@ func GetCategory() gin.HandlerFunc{
 
 func GetGallery() gin.HandlerFunc{
 	return func(c *gin.Context){
-		// if err := helper.CheckUserType(c, "ADMIN"); err != nil {
-		// 	c.JSON(http.StatusOK, gin.H{"message":err.Error(), "hasError": true})
-		// 	return
-		// }
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 		
 		myOptions := options.Find()

@@ -11,6 +11,8 @@ import (
 func ProductRoutes(incomingRoutes *gin.Engine){
 	incomingRoutes.GET("products", controller.GetProducts())
 	incomingRoutes.GET("/products/:product_id", controller.GetProduct())
+	incomingRoutes.GET("products/gallery/get/:category", controller.GetCategory())
+
 
 	incomingRoutes.Use(middleware.Admin())
 	incomingRoutes.POST("products/create", controller.CreateProduct())

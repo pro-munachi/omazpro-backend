@@ -9,7 +9,6 @@ import (
 
 func GalleryRoutes(incomingRoutes *gin.Engine){
 
-	incomingRoutes.GET("/gallery/:category", controller.GetCategory())
 
 
 	incomingRoutes.Use(middleware.Admin())
