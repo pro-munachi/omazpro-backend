@@ -18,6 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var userCollection *mongo.Collection = database.OpenCollection(database.Client, "user")
@@ -152,5 +153,43 @@ func Login() gin.HandlerFunc{
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "data":foundUser, "hasError": false})
+	}
+}
+
+func GetUsers() gin.HandlerFunc{
+	return func(c *gin.Context){
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+		
+		myOptions := options.Find()
+		myOptions.SetSort(bson.M{"$natural":-1})
+		result,err := userCollection.Find(ctx,  bson.M{}, myOptions)
+		
+		defer cancel()
+		if err!=nil{
+			c.JSON(http.StatusOK, gin.H{"message":"error occured while listing users", "hasError": true})
+			return
+		}
+		var allusers []bson.M
+		if err = result.All(ctx, &allusers); err!=nil{
+			log.Fatal(err)
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "users":allusers, "hasError": false})}
+}
+
+
+func GetUser() gin.HandlerFunc{
+	return func(c *gin.Context){
+		UserId := c.Param("userid")
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		var user models.User
+		err := userCollection.FindOne(ctx, bson.M{"user_id":UserId}).Decode(&user)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "user":user, "hasError": false})
 	}
 }
