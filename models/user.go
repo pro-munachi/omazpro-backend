@@ -8,8 +8,8 @@ import (
 
 type User struct{
 	ID				primitive.ObjectID		`bson:"_id"`
-	Firstname		*string					`json:"firstName" validate:"required,min=2,max=100"`
-	Lastname		*string					`json:"lastName" validate:"required,min=2,max=100"`
+	First_name		*string					`json:"firstName" validate:"required,min=2,max=100"`
+	Last_name		*string					`json:"lastName" validate:"required,min=2,max=100"`
 	Password		*string					`json:"password" validate:"required,min=5"`
 	Email			*string					`json:"email" validate:"email,required"`
 	Phone			*string					`json:"phone" validate:"required"`
