@@ -15,6 +15,7 @@ func GalleryRoutes(incomingRoutes *gin.Engine){
 
 	incomingRoutes.POST("/gallery/create", controller.CreateGallery())
 	incomingRoutes.GET("/gallery/all", controller.GetGallery())
+	incomingRoutes.DELETE("/gallery/delete/:id", controller.DeleteGallery())
 
 
 }

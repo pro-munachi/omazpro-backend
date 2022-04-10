@@ -107,3 +107,29 @@ func GetGallery() gin.HandlerFunc{
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "orders":allgallery, "hasError": false})}
 }
+
+func DeleteGallery() gin.HandlerFunc{
+	return func(c *gin.Context){
+		id := c.Param("id")
+
+		primID, _ :=primitive.ObjectIDFromHex(id)
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		var checkOrder models.Gallery
+		err := galleryCollection.FindOne(ctx, bson.M{"_id":primID}).Decode(&checkOrder)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true, id: primID})
+			return
+		}
+
+		res, err := galleryCollection.DeleteOne(ctx, bson.M{"_id": primID})
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "gallery":res, "hasError": false})
+	}
+}
