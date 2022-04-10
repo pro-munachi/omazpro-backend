@@ -101,6 +101,7 @@ func GetOrder() gin.HandlerFunc{
 func UpdateOrder() gin.HandlerFunc{
 	return func(c *gin.Context){
 		id := c.Param("id")
+		user := c.GetString("uid")
 
 		var order models.Order
 		if err := c.BindJSON(&order); err != nil {
@@ -109,6 +110,19 @@ func UpdateOrder() gin.HandlerFunc{
 		}
 	
 		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		var checkOrder models.Order
+		err := orderCollection.FindOne(ctx, bson.M{"orderid":id}).Decode(&checkOrder)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+
+		if checkOrder.User != user {
+			c.JSON(http.StatusOK, gin.H{"message": "You don't have access to pay for this order", "hasError": true})
+			return
+		}
 
 
 		filter := bson.M{"orderid": id}
