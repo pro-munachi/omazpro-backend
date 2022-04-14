@@ -163,3 +163,36 @@ func ConfirmPayment() gin.HandlerFunc{
 
 	}	
 }
+
+
+func GetUserOrders() gin.HandlerFunc{
+	return func(c *gin.Context){
+		user := c.Param("id")
+
+		findOptions := options.Find()
+
+
+		var ctx, cancel = context.WithTimeout(context.Background(), 100*time.Second)
+
+		var results []models.Order
+		curr, err := orderCollection.Find(ctx, bson.M{"user":user}, findOptions)
+		defer cancel()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{"message": err.Error(), "hasError": true})
+			return
+		}
+
+		for curr.Next(context.TODO()) {
+			//Create a value into which the single document can be decoded
+			var orders models.Order
+			err := curr.Decode(&orders)
+			if err != nil {
+				log.Fatal(err)
+			}
+	
+			results = append(results, orders)
+		}
+
+		c.JSON(http.StatusOK, gin.H{"message": "request processed successfully", "gallery":results, "hasError": false})
+	}
+}
