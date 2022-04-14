@@ -10,10 +10,9 @@ import (
 
 func UserRoutes(incomingRoutes *gin.Engine){
 
-
+	incomingRoutes.GET("/users/:userid", controller.GetUser())
 
 	incomingRoutes.Use(middleware.Admin())
-	incomingRoutes.GET("users", controller.GetProducts())
-	incomingRoutes.GET("/users/:userid", controller.GetProduct())
+	incomingRoutes.GET("users", controller.GetUsers())
 
 }
